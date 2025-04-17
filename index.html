@@ -133,8 +133,8 @@
         }
         #roulette-wheel {
             display: block;
-            width: 100%;
-            height: 100%;
+            max-width: 100%; /* Ensure CSS doesn't conflict with style attribute */
+            max-height: 100%;
         }
         /* Pointer overlapping the wheel */
         .pointer {
@@ -271,6 +271,7 @@
 
         function drawRouletteWheel() {
             // ... (drawRouletteWheel function remains the same) ...
+            const dpr = window.devicePixelRatio || 1; // Get device pixel ratio
             const numItems = items.length;
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
@@ -286,7 +287,7 @@
                 ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.fillStyle = '#fff';
-                ctx.font = '20px sans-serif';
+                ctx.font = '${20 * dpr}px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('項目を追加', centerX, centerY); // Changed text for empty wheel
@@ -294,7 +295,8 @@
             }
 
             const arcSize = (2 * Math.PI) / numItems;
-            const fontSize = Math.max(10, Math.min(16, Math.floor(radius / 10)));
+            const logicalRadius = radius / dpr;
+            const fontSize = Math.max(14, Math.min(28, Math.floor(logicalRadius / 7))) * dpr;
             ctx.font = `${fontSize}px sans-serif`;
 
             for (let i = 0; i < numItems; i++) {
@@ -310,25 +312,31 @@
                 ctx.save();
                 ctx.fillStyle = "#fff";
                 ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 2;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
+                // Scale shadow properties
+                ctx.shadowBlur = 2 * dpr;
+                ctx.shadowOffsetX = 1 * dpr;
+                ctx.shadowOffsetY = 1 * dpr;
 
                 ctx.translate(centerX, centerY);
                 ctx.rotate(angle + arcSize / 2);
                 ctx.textAlign = "right";
                 ctx.textBaseline = "middle";
+                // Use scaled radius for text placement
                 const textRadius = radius * 0.75;
-                const maxTextLength = Math.floor(radius / fontSize) + 5;
+                // Adjust maxTextLength calculation based on logical size
+                const logicalFontSize = fontSize / dpr;
+                const maxTextLength = Math.floor(logicalRadius / logicalFontSize) + 8; // Allow slightly more chars
                 let displayText = items[i].length > maxTextLength ? items[i].substring(0, maxTextLength) + '...' : items[i];
 
-                if (arcSize > 0.05 && radius > 20) {
+                // Check arc size and radius before drawing text
+                if (arcSize > 0.05 && radius > 20 * dpr) {
                      ctx.fillText(displayText, textRadius, 0);
                 }
                 ctx.restore();
             }
             ctx.strokeStyle = '#aaa';
-            ctx.lineWidth = 3;
+            // Scale line width
+            ctx.lineWidth = 3 * dpr;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
             ctx.stroke();
@@ -572,10 +580,21 @@
 
         function resizeCanvas() {
             const wheelArea = document.querySelector('.wheel-area');
-            const size = Math.min(wheelArea.clientWidth, wheelArea.clientHeight);
-            canvas.width = size;
-            canvas.height = size;
-            drawRouletteWheel();
+            const displaySize = Math.min(wheelArea.clientWidth, wheelArea.clientHeight);
+            const dpr = window.devicePixelRatio || 1;
+
+            // Set the canvas buffer size (higher resolution)
+            canvas.width = displaySize * dpr;
+            canvas.height = displaySize * dpr;
+
+            // Set the display size of the canvas using CSS
+            canvas.style.width = displaySize + 'px';
+            canvas.style.height = displaySize + 'px';
+
+            // No need to scale context if drawing coordinates are scaled manually
+            // ctx.scale(dpr, dpr); // Removed this
+
+            drawRouletteWheel(); // Redraw with new dimensions
         }
         window.addEventListener('resize', resizeCanvas);
 
