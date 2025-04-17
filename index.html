@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja"> <!-- Changed language to Japanese -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spinning Webルーレット</title>
+    <title>Webルーレット</title> <!-- Changed title -->
     <style>
         /* Basic styles */
         body {
@@ -188,30 +188,30 @@
 </head>
 <body>
     <!-- Result Popup Area -->
-    <div class="result-popup" id="result-display">Result: --</div>
+    <div class="result-popup" id="result-display">結果: --</div> <!-- Changed initial text -->
 
     <div class="container" id="main-container">
         <div class="controls">
-            <button id="start-button">開始</button>
-            <button id="reset-button">リセット</button>
+            <button id="start-button">スタート</button> <!-- Changed button text -->
+            <button id="reset-button">リセット</button> <!-- Changed button text -->
         </div>
 
-        <h1 id="roulette-title">Webルーレット</h1>
+        <h1 id="roulette-title">ルーレット</h1> <!-- Changed heading text -->
 
         <!-- Secret Input Area - Hidden by default -->
         <div class="secret-input-container">
-            <button id="close-secret-input" title="Hide Predetermined Target Input">&times;</button>
-            <label for="secret-input">Predetermined Target (Optional: Index or Text)</label>
-            <textarea id="secret-input" rows="3" placeholder="Leave empty for random spin. e.g., 3 or 'Item Name' (uses first line)"></textarea>
+            <button id="close-secret-input" title="指定ターゲット入力を隠す">&times;</button> <!-- Changed title attribute -->
+            <label for="secret-input">指定ターゲット (任意: 番号またはテキスト)</label> <!-- Changed label text -->
+            <textarea id="secret-input" rows="3" placeholder="ランダムは空欄。例: 3 または '項目名' (最初の行を使用)"></textarea> <!-- Changed placeholder -->
         </div>
 
         <!-- Set default value for textarea -->
-        <textarea id="item-list" placeholder="Enter items here, one per line...">1
+        <textarea id="item-list" placeholder="項目を1行に1つずつ入力...">1
 2
 3
 4
 5
-6</textarea>
+6</textarea> <!-- Changed placeholder -->
 
         <!-- Wheel Area -->
         <div class="wheel-area">
@@ -289,7 +289,7 @@
                 ctx.font = '20px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('Add items', centerX, centerY);
+                ctx.fillText('項目を追加', centerX, centerY); // Changed text for empty wheel
                 return;
             }
 
@@ -408,7 +408,7 @@
             pointerElement.classList.remove('predetermined');
 
             if (items.length === 0) {
-                errorMessageDisplay.textContent = 'Please enter at least one item.';
+                errorMessageDisplay.textContent = '項目を1つ以上入力してください。'; // Changed error message
                 drawRouletteWheel();
                 return;
             } else {
@@ -508,7 +508,7 @@
             currentAngle = 0;
             drawRouletteWheel();
             resultDisplayPopup.classList.remove('show');
-            resultDisplayPopup.textContent = 'Result: --';
+            resultDisplayPopup.textContent = '結果: --';
             resultDisplayPopup.style.backgroundColor = '#007bff';
             errorMessageDisplay.textContent = '';
             pointerElement.classList.remove('predetermined');
